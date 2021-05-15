@@ -48,7 +48,7 @@ curl --location --request POST 'https://example.com/api/admin/execute' \
 	"admin": {
 		"email": "abuse@example.com",
 		"password": "some_password"
-	}
+	},
 	"message": "ROOT_ZONE_IS_NOT_SET"
 }
 ```
