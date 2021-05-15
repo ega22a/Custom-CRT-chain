@@ -1,0 +1,15 @@
+RewriteEngine On
+RewriteBase /
+
+RewriteCond %{REQUEST_FILENAME}\.php -f
+RewriteRule ^(.*)$ $1.php
+
+<FilesMatch ".(htaccess|htpasswd|sql|ini)$">
+    Order Allow,Deny
+    Deny from all
+    Allow from 127.0.0.1
+</FilesMatch>
+
+RedirectMatch 404 /\.git.*
+
+Options All -Indexes
