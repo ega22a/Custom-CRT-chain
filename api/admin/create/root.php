@@ -48,14 +48,11 @@
                                 ]
                             );
                             $raw_data = [
-                                'csr' => null,
                                 'x509' => null,
                                 'pkey' => null
                             ];
-                            openssl_csr_export($CA_root_csr, $raw_data['csr']);
                             openssl_x509_export($CA_root_x509, $raw_data['x509']);
                             openssl_pkey_export($CA_root_private_key, $raw_data['pkey'], $passphrase['primary']);
-                            file_put_contents(CONFIGURATION['system']['path'] . '/zones/root/root.csr', $raw_data['csr']);
                             file_put_contents(CONFIGURATION['system']['path'] . '/zones/root/public.crt', $raw_data['x509']);
                             file_put_contents(CONFIGURATION['system']['path'] . '/zones/root/private.key', $raw_data['pkey']);
                             $dn = json_encode($dn, JSON_UNESCAPED_UNICODE);
