@@ -108,12 +108,13 @@
                             'status' => 'UNAUTHORIZED',
                         ]));
                     }
-                } else {
-                    http_response_code(401);
-                    print(json_encode([
-                        'status' => $user -> status,
-                    ]));
+            } else {
+                http_response_code(401);
+                print(json_encode([
+                    'status' => $user -> status,
+                ]));
             }
+            $user -> close();
         } else {
             http_response_code(405);
             print(json_encode([
