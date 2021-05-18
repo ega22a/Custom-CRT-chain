@@ -34,8 +34,13 @@
             foreach ($ini as $key => $value) {
                 if (is_array($value)) {
                     $return .= "[$key]\n";
-                    foreach ($value as $sub_key => $sub_value)
-                        $return .= "{$sub_key} = {$sub_value}\n";
+                    foreach ($value as $sub_key => $sub_value) {
+                        if (is_array($sub_value)) {
+                            foreach ($sub_value as $third_key => $third_value)
+                                $return .= "{$sub_key}[{$third_key}] = {$third_value}\n";
+                        } else
+                            $return .= "{$sub_key} = {$sub_value}\n";
+                    }
                 } else $return .= "{$key} = {$value}\n";
             }
             file_put_contents(__DIR__ . '/const.ini', $return);
@@ -105,20 +110,20 @@
         }
     }
 
-    class signatures {
-        private $database = null;
+    // class signatures {
+    //     private $database = null;
 
-        public function __construct() {
-            if (!IS_FIRST_START) {
-                $this -> database = new new_mysqli();
-            } else return false;
-        }
+    //     public function __construct() {
+    //         if (!IS_FIRST_START) {
+    //             $this -> database = new new_mysqli();
+    //         } else return false;
+    //     }
 
-        public function close() {
-            $this -> database -> close();
-        }
+    //     public function close() {
+    //         $this -> database -> close();
+    //     }
 
-    }
+    // }
 
     class user {
         private $database = null;

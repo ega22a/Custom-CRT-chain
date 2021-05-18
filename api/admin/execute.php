@@ -74,6 +74,7 @@
                                         ],
                                         'system' => [
                                             'path' => $_POST['folder_path'],
+                                            'roles' => [1, 2, 3],
                                         ]
                                     ]);
                                     print(json_encode([

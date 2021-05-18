@@ -14,9 +14,44 @@
                             'localityName',
                             'organizationName',
                             'organizationalUnitName',
-                            'emailAddress'
+                            'emailAddress',
+                            'lastname',
+                            'firstname',
+                            'patronymic',
+                            'role'
                         ]))) {
-                            
+                            $role = intval($_POST['role']);
+                            if (in_array($role, CONFIGURATION['system']['roles'])) {
+                                $dbase = new new_mysqli();
+                                if ($new_user = $user -> create_user(
+                                    $_POST['emailAddress'],
+                                    $_POST['countryName'],
+                                    $_POST['stateOrProvinceName'],
+                                    $_POST['localityName'],
+                                    $_POST['organizationName'],
+                                    $_POST['organizationalUnitName'],
+                                    $_POST['firstname'],
+                                    $_POST['lastname'],
+                                    $_POST['patronymic'],
+                                    $role
+                                )) {
+                                    print(json_encode([
+                                        'status' => 'OK',
+                                        'user' => $new_user,
+                                    ]));
+                                } else {
+                                    http_response_code(403);
+                                    print(json_encode([
+                                        'status' => $new_user,
+                                    ]));
+                                }
+                                $dbase -> close();
+                            } else {
+                                http_response_code(403);
+                                print(json_encode([
+                                    'status' => 'UNDEFINED_ROLE',
+                                ]));
+                            }
                         } else {
                             http_response_code(403);
                             print(json_encode([

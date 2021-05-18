@@ -45,7 +45,8 @@ CREATE TABLE `signatures`(
     `owner_id` INT NOT NULL,
     `zone_id` INT NULL,
     `passphrase` TEXT NOT NULL,
-    `valid_to` VARCHAR(255) NOT NULL
+    `valid_to` VARCHAR(255) NOT NULL,
+    `is_revoked` INT(1) NOT NULL DEFAULT 0
 );
 ALTER TABLE
     `signatures` ADD INDEX `signatures_creater_id_index`(`creater_id`);
