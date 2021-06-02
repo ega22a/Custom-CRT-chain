@@ -61,7 +61,7 @@
                             $tmp_conf['first_start']['is_root_zone_created'] = 'true';
                             save_configuration($tmp_conf);
                             print(json_encode([
-                                'status' => 'ok',
+                                'status' => 'OK',
                                 'passphrase' => $passphrase['primary'],
                             ]));
                             $dbase -> close();

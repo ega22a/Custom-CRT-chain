@@ -4,80 +4,73 @@
 
     if (!IS_FIRST_START) {
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-            if (!boolval(CONFIGURATION['first_start']['is_root_zone_created'])) {
-                $user = new user();
-                if ($user -> is_found && $user -> is_granted) {
-                    if ($user -> data -> role == 1) {
-                        if (!($not_found = check_payload('POST', [
-                            'countryName',
-                            'stateOrProvinceName',
-                            'localityName',
-                            'organizationName',
-                            'organizationalUnitName',
-                            'emailAddress',
-                            'lastname',
-                            'firstname',
-                            'patronymic',
-                            'role'
-                        ]))) {
-                            $role = intval($_POST['role']);
-                            if (in_array($role, CONFIGURATION['system']['roles'])) {
-                                $dbase = new new_mysqli();
-                                if ($new_user = $user -> create_user(
-                                    $_POST['emailAddress'],
-                                    $_POST['countryName'],
-                                    $_POST['stateOrProvinceName'],
-                                    $_POST['localityName'],
-                                    $_POST['organizationName'],
-                                    $_POST['organizationalUnitName'],
-                                    $_POST['firstname'],
-                                    $_POST['lastname'],
-                                    $_POST['patronymic'],
-                                    $role
-                                )) {
-                                    print(json_encode([
-                                        'status' => 'OK',
-                                        'user' => $new_user,
-                                    ]));
-                                } else {
-                                    http_response_code(403);
-                                    print(json_encode([
-                                        'status' => $new_user,
-                                    ]));
-                                }
-                                $dbase -> close();
+            $user = new user();
+            if ($user -> is_found && $user -> is_granted) {
+                if ($user -> data -> role == 1) {
+                    if (!($not_found = check_payload('POST', [
+                        'countryName',
+                        'stateOrProvinceName',
+                        'localityName',
+                        'organizationName',
+                        'organizationalUnitName',
+                        'emailAddress',
+                        'lastname',
+                        'firstname',
+                        'patronymic',
+                        'role'
+                    ]))) {
+                        $role = intval($_POST['role']);
+                        if (in_array($role, CONFIGURATION['system']['roles'])) {
+                            $dbase = new new_mysqli();
+                            if ($new_user = $user -> create_user(
+                                $_POST['emailAddress'],
+                                $_POST['countryName'],
+                                $_POST['stateOrProvinceName'],
+                                $_POST['localityName'],
+                                $_POST['organizationName'],
+                                $_POST['organizationalUnitName'],
+                                $_POST['firstname'],
+                                $_POST['lastname'],
+                                $_POST['patronymic'],
+                                $role
+                            )) {
+                                print(json_encode([
+                                    'status' => 'OK',
+                                    'user' => $new_user,
+                                ]));
                             } else {
                                 http_response_code(403);
                                 print(json_encode([
-                                    'status' => 'UNDEFINED_ROLE',
+                                    'status' => $new_user,
                                 ]));
                             }
+                            $dbase -> close();
                         } else {
                             http_response_code(403);
                             print(json_encode([
-                                'status' => 'QUERY_IS_NOT_FULL',
-                                'where' => $not_found,
+                                'status' => 'UNDEFINED_ROLE',
                             ]));
                         }
                     } else {
-                        http_response_code(401);
+                        http_response_code(403);
                         print(json_encode([
-                            'status' => 'UNAUTHORIZED',
+                            'status' => 'QUERY_IS_NOT_FULL',
+                            'where' => $not_found,
                         ]));
                     }
                 } else {
                     http_response_code(401);
                     print(json_encode([
-                        'status' => $user -> status,
+                        'status' => 'UNAUTHORIZED',
                     ]));
                 }
-                $user -> close();
             } else {
-                http_response_code(403);
+                http_response_code(401);
                 print(json_encode([
-                    'status' => 'ROOT_ZONE_IS_CREATED',
+                    'status' => $user -> status,
                 ]));
             }
+            $user -> close();
         } else {
             http_response_code(405);
             print(json_encode([
